@@ -3,16 +3,27 @@ import json
 import urllib2
 
 try:
+    # milestone
+    req = urllib2.urlopen("https://api.github.com/repos/g0v/kuansim/milestones")
+    milestones = req.read()
+    json_milestone = json.loads(milestones)
+
+    # issues
     req = urllib2.urlopen("https://api.github.com/repos/g0v/kuansim/issues")
     issues = req.read()
-
     json_issues = json.loads(issues)
+
     dict_labels = {}
     for x in json_issues:
         if x["labels"]:
             for y in x["labels"]:
                 dict_labels[y["name"]] = y["name"]
     # print sorted(dict_labels)
+
+    # display
+    for x in json_milestone:
+        print x["title"]
+    print "\n";
 
     print "尚未認養:"
     for x in json_issues:
