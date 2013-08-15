@@ -18,6 +18,7 @@ list_issue_devops = []
 list_issue_doc = []
 list_issue_other = []
 mail_body = ""
+
 for x in dict_issue:
 	if not x.assignee:
 		for y in x.labels:
@@ -41,6 +42,17 @@ for x in dict_issue:
 				break
 
 mail_body = mail_body + "待認領任務"
+
+# 印出列表任務
+def get_str_issue_by_label(list, label):
+	str_body = ""
+	if len(list) > 0:
+		list.sort()
+		str_body =  "%s\n%s\n" % (str_body, label)
+		for x in list:
+			str_body = "%s%s\n" % (str_body, x.encode('utf-8'))
+	return str_body
+
 
 if len(list_issue_backend) > 0:
 	list_issue_backend.sort()
@@ -79,25 +91,28 @@ if len(list_issue_other) > 0:
 		mail_body = mail_body + x.encode('utf-8') + "\n"
 
 # 寄信
-to = 'kuansim@googlegroups.com'
-gmail_user = 'g0v.kuansim@gmail.com'
-gmail_pwd = 'hackthonforever'
-smtpserver = smtplib.SMTP("smtp.gmail.com",587)
-smtpserver.ehlo()
-smtpserver.starttls()
-smtpserver.login(gmail_user, gmail_pwd)
+def send_mail_kuansim():
+	to = 'kuansim@googlegroups.com'
+	gmail_user = raw_input("username:\n")
+	gmail_pwd = raw_input("password:\n")
+	smtpserver = smtplib.SMTP("smtp.gmail.com",587)
+	smtpserver.ehlo()
+	smtpserver.starttls()
+	smtpserver.login(gmail_user, gmail_pwd)
 
-today = datetime.date.today()
-strSubject = "待認領任務 (%s)" % (today.strftime('%m/%d'))
-strSubject = Header(strSubject, 'utf-8')
-# header = 'To:' + to + '\n' + 'From:' + gmail_user + '\n' + 'Subject:' + strSubject + '\n'
+	today = datetime.date.today()
+	strSubject = "待認領任務 (%s)" % (today.strftime('%m/%d'))
+	strSubject = Header(strSubject, 'utf-8')
+	# header = 'To:' + to + '\n' + 'From:' + gmail_user + '\n' + 'Subject:' + strSubject + '\n'
 
-msg = MIMEText(mail_body, 'plain', 'utf-8')
-msg['From'] = gmail_user
-msg['To'] = to
-msg['Subject'] = strSubject
-# msg = header + mail_body
-# print msg
-smtpserver.sendmail(gmail_user, to, msg.as_string())
-print 'done!'
-smtpserver.close()
+	msg = MIMEText(mail_body, 'plain', 'utf-8')
+	msg['From'] = gmail_user
+	msg['To'] = to
+	msg['Subject'] = strSubject
+	# msg = header + mail_body
+	# print msg
+	smtpserver.sendmail(gmail_user, to, msg.as_string())
+	print 'done!'
+	smtpserver.close()
+	
+send_mail_kuansim()
