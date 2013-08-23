@@ -7,4 +7,8 @@ kuansim-devops
 - 新手文件整理
 
 ### 論壇維護
-- 寫一個script寄每週待認領任務摘要到google group
+寫一個script寄每週待認領任務摘要到google groups
+
+```
+python2 kuansim_weekly_issues.py
+```
